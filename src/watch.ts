@@ -13,6 +13,8 @@ import { accountEventIndexerAbi } from "./abi/accountEventIndexerAbi";
 import { passkeyAdminAbi } from "./abi/passkeyAdminAbi";
 import { Log, RpcLog } from "viem";
 
+import "dotenv/config";
+
 const provider = createPublicClient({
   chain: sepolia,
   transport: http(

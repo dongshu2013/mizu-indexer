@@ -1,9 +1,13 @@
 #!/bin/bash
 
+echo "compiling..."
 npx tsc
+echo "compiled..."
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-pm2 start $SCRIPT_DIR/indexer.sh
+echo "starting indexer..."
+pm2 start $SCRIPT_DIR/scripts/indexer.sh
 
-pm2 start $SCRIPT_DIR/server.sh
+echo "starting server..."
+pm2 start $SCRIPT_DIR/scripts/server.sh
