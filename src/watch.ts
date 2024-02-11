@@ -177,6 +177,4 @@ const indexEventsNoThrow = async () => {
 };
 
 indexEventsNoThrow();
-
-// run every 30s
-// setInterval(indexEventsNoThrow, 30000);
+setInterval(indexEventsNoThrow, 30000);
