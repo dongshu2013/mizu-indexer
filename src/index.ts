@@ -15,7 +15,7 @@ const ip = (req: express.Request) => {
   return req.headers['x-forwarded-for'] || req.socket.remoteAddress 
 }
 
-app.get("/api/account/metadata", cors(), async (req, res) => {
+app.get("/metadata", cors(), async (req, res) => {
   try {
     if (await ratelimit(ip(req) as string)) {
       throw new ServerError(429, "Rate limit exceeded");
@@ -31,7 +31,7 @@ app.get("/api/account/metadata", cors(), async (req, res) => {
   }
 });
 
-app.get("/api/account/passkey", cors(), async (req, res) => {
+app.get("/passkey", cors(), async (req, res) => {
   try {
     if (await ratelimit(ip(req) as string)) {
       throw new ServerError(429, "Rate limit exceeded");
@@ -47,7 +47,7 @@ app.get("/api/account/passkey", cors(), async (req, res) => {
   }
 });
 
-app.get("/api/account/operators", cors(), async (req, res) => {
+app.get("/operators", cors(), async (req, res) => {
   try {
     if (await ratelimit(ip(req) as string)) {
       throw new ServerError(429, "Rate limit exceeded");
