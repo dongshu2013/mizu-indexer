@@ -14,7 +14,7 @@ export const PASSKEY_TOPIC_HASH =
 
 export const getOperatorsFromAddress = async (
   address: HexString
-): Promise<{ operators: HexString[]; block: number } | undefined> => {
+): Promise<{ operators: HexString[]; block: string } | undefined> => {
   if (!isAddress(address)) {
     throw new ServerError(400, "invalid address");
   }
@@ -29,13 +29,13 @@ export const getOperatorsFromAddress = async (
         .match(/.{40}/g)
         .map((c: string) => getAddress("0x" + c)),
       block: parsed.block,
-    } as { operators: HexString[]; block: number };
+    } as { operators: HexString[]; block: string };
   }
 };
 
 export const getMetadataFromAddress = async (
   address: string
-): Promise<{ metadata: string; block: number } | undefined> => {
+): Promise<{ metadata: string; block: string } | undefined> => {
   if (!isAddress(address)) {
     throw new ServerError(400, "invalid address");
   }
@@ -43,13 +43,13 @@ export const getMetadataFromAddress = async (
   const redis = await RedisService.getInstance();
   const metadata = await redis.get(genKey(normalized, METADATA_TOPIC_HASH));
   if (metadata) {
-    return JSON.parse(metadata) as { metadata: string; block: number };
+    return JSON.parse(metadata) as { metadata: string; block: string };
   }
 };
 
 export const getPasskeyFromAddress = async (
   address: string
-): Promise<{ passkey: Passkey; block: number } | undefined> => {
+): Promise<{ passkey: Passkey; block: string } | undefined> => {
   if (!isAddress(address)) {
     throw new ServerError(400, "invalid address");
   }
@@ -68,6 +68,6 @@ export const getPasskeyFromAddress = async (
     return {
       passkey,
       block: parsed.block,
-    } as { passkey: Passkey; block: number };
+    } as { passkey: Passkey; block: string };
   }
 };
