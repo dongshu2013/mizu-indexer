@@ -20,9 +20,9 @@ app.get("/metadata", cors(), async (req, res) => {
     if (await ratelimit(ip(req) as string)) {
       throw new ServerError(429, "Rate limit exceeded");
     }
-    const metadata = await getMetadataFromAddress(req.query.address as string);
-    if (metadata) {
-      return res.status(200).json({ metadata });
+    const result = await getMetadataFromAddress(req.query.address as string);
+    if (result) {
+      return res.status(200).json(result);
     } else {
       return res.status(404).send("Not found");
     }
@@ -36,9 +36,9 @@ app.get("/passkey", cors(), async (req, res) => {
     if (await ratelimit(ip(req) as string)) {
       throw new ServerError(429, "Rate limit exceeded");
     }
-    const passkey = await getPasskeyFromAddress(req.query.address as string);
-    if (passkey) {
-      return res.status(200).json({ passkey });
+    const result = await getPasskeyFromAddress(req.query.address as string);
+    if (result) {
+      return res.status(200).json(result);
     } else {
       return res.status(404).send("Not found");
     }
@@ -52,9 +52,9 @@ app.get("/operators", cors(), async (req, res) => {
     if (await ratelimit(ip(req) as string)) {
       throw new ServerError(429, "Rate limit exceeded");
     }
-    const operators = await getOperatorsFromAddress(req.query.address as HexString);
-    if (operators) {
-      return res.status(200).json({ operators });
+    const result = await getOperatorsFromAddress(req.query.address as HexString);
+    if (result) {
+      return res.status(200).json(result);
     } else {
       return res.status(404).send("Not found");
     }

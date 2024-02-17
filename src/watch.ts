@@ -49,8 +49,12 @@ async function indexNewMetadataEvent(
       account: string;
       metadata: string;
     };
-    console.log("NewMetadata ======> ", account, " <-> ", metadata);
-    return [genKey(account, METADATA_TOPIC_HASH), metadata];
+    const value = JSON.stringify({
+      metadata,
+      block: log.blockNumber,
+    });
+    console.log("NewMetadata ======> ", account, " <-> ", value);
+    return [genKey(account, METADATA_TOPIC_HASH), value];
   });
   await redis.mset(events);
   if (logs.length === Number(query.offset)) {
@@ -80,8 +84,12 @@ async function indexAllNewOperatorsEvent(
       account: string;
       operators: string;
     };
-    console.log("NewOperators ======> ", account, " <-> ", operators);
-    return [genKey(account, NEW_OPERATORS_TOPIC_HASH), operators];
+    const value = JSON.stringify({
+      operators,
+      block: log.blockNumber,
+    });
+    console.log("NewOperators ======> ", account, " <-> ", value);
+    return [genKey(account, NEW_OPERATORS_TOPIC_HASH), value];
   });
   await redis.mset(events);
   if (logs.length === Number(query.offset)) {
@@ -113,8 +121,12 @@ async function indexAllPasskeySetEvent(
       id: log.args.passkeyId,
     });
     const account = log.args.account;
-    console.log("PasskeySet ======> ", account, " <-> ", passkey);
-    return [genKey(account, PASSKEY_TOPIC_HASH), passkey];
+    const value = JSON.stringify({
+      passkey,
+      block: log.blockNumber,
+    });
+    console.log("PasskeySet ======> ", account, " <-> ", value);
+    return [genKey(account, PASSKEY_TOPIC_HASH), value];
   });
   await redis.mset(events);
   if (logs.length === Number(query.offset)) {
