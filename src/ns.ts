@@ -1,4 +1,4 @@
-import { isAddress, getAddress } from "viem";
+import { isAddress, getAddress, hexToBytes } from "viem";
 
 import { HexString, ServerError, Passkey } from "./types";
 import { RedisService } from "./redis";
@@ -61,8 +61,8 @@ export const getPasskeyFromAddress = async (
     const passkey = {
       id: parsed.passkey.id,
       pub_key: {
-        x: Buffer.from(parsed.passkey.x, "hex"),
-        y: Buffer.from(parsed.passkey.y, "hex"),
+        x: hexToBytes("0x" + parsed.passkey.x as HexString),
+        y: hexToBytes("0x" + parsed.passkey.y as HexString),
       },
     };
     return {
