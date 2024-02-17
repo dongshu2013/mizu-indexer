@@ -115,16 +115,16 @@ async function indexAllPasskeySetEvent(
   }
   const parsed = parseEventLogs({ abi: passkeyAdminAbi, logs });
   const events: Array<[string, string]> = parsed.map((log) => {
-    const passkey = JSON.stringify({
+    const passkey = {
       x: log.args.pubKey.pubKeyX.toString(16),
       y: log.args.pubKey.pubKeyY.toString(16),
       id: log.args.passkeyId,
-    });
-    const account = log.args.account;
+    };
     const value = JSON.stringify({
       passkey,
       block: log.blockNumber,
     });
+    const account = log.args.account;
     console.log("PasskeySet ======> ", account, " <-> ", value);
     return [genKey(account, PASSKEY_TOPIC_HASH), value];
   });
