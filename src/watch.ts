@@ -6,8 +6,8 @@ import {
   genKey,
 } from "./ns";
 
-import { sepolia } from "viem/chains";
-import { createPublicClient, http, parseEventLogs } from "viem";
+import { polygon, polygonMumbai, sepolia } from "viem/chains";
+import { Chain, createPublicClient, http, parseEventLogs } from "viem";
 import { Network } from "alchemy-sdk";
 import { accountEventIndexerAbi } from "./abi/accountEventIndexerAbi";
 import { passkeyAdminAbi } from "./abi/passkeyAdminAbi";
@@ -15,18 +15,41 @@ import { Log, RpcLog } from "viem";
 
 import "dotenv/config";
 
+const getChain = (): Chain => {
+  if (process.env.CURRENT_CHAIN_NAME === "sepolia") {
+    return sepolia;
+  } else if (process.env.CURRENT_CHAIN_NAME === "mumbai") {
+    return polygonMumbai;
+  } else if (process.env.CURRENT_CHAIN_NAME === "polygon") {
+    return polygon;
+  } else {
+    throw new Error("Invalid chain name");
+  }
+}
+
 const provider = createPublicClient({
-  chain: sepolia,
+  chain: getChain(),
   transport: http(
-    `https://${Network.ETH_SEPOLIA}.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`
+    `https://${Network.MATIC_MUMBAI}.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`
   ),
 });
 
-const SCAN_SERVICE_URL = "https://api-sepolia.etherscan.io/api";
+const scan_service_url = () => {
+  if (process.env.CURRENT_CHAIN_NAME === "sepolia") {
+    return "https://api-sepolia.etherscan.io/api";
+  } else if (process.env.CURRENT_CHAIN_NAME === "mumbai") {
+    return "https://api-testnet.polygonscan.com/api";
+  } else if (process.env.CURRENT_CHAIN_NAME === "polygon") {
+    return "https://api.polygonscan.com/api";
+  } else {
+    throw new Error("Invalid chain name");
+  }
+}
+
 
 function genUrl(query: Record<string, string>) {
   const params = new URLSearchParams(query);
-  return `${SCAN_SERVICE_URL}?${params.toString()}`;
+  return `${scan_service_url()}?${params.toString()}`;
 }
 
 async function indexNewMetadataEvent(
