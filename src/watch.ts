@@ -161,7 +161,11 @@ async function indexAllPasskeySetEvent(
 
 const indexEvents = async () => {
   const redis = await RedisService.getInstance();
-  const fromBlock = (await redis.get("lastBlock")) ?? "0";
+  const lastBlock = await redis.get("lastBlock");
+  // index lastBlock - 5 mins, we see sometimes the polyscan will
+  // not return the lastest data, so we re-index a timewindow to
+  // mitigate the issue
+  const fromBlock = Number(lastBlock) - 150 ?? 0;
   const toBlock = (await provider.getBlockNumber()).toString();
   if (Number(fromBlock) >= Number(toBlock)) {
     return;
@@ -173,7 +177,7 @@ const indexEvents = async () => {
     apikey: process.env.ETHERSCAN_API_KEY!,
     page: "1",
     offset: "1000",
-    fromBlock,
+    fromBlock: fromBlock.toString(),
     toBlock,
   };
   await Promise.all([
